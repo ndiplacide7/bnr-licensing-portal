@@ -15,6 +15,7 @@ import rw.gov.bnr.bnrlicensingportal.domain.entity.User;
 import rw.gov.bnr.bnrlicensingportal.domain.enums.AuditAction;
 import rw.gov.bnr.bnrlicensingportal.domain.repository.UserRepository;
 import rw.gov.bnr.bnrlicensingportal.security.JwtTokenProvider;
+import rw.gov.bnr.bnrlicensingportal.security.TokenDenylist;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -30,6 +31,7 @@ public class AuthServiceImpl implements AuthService {
     private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuditLogService auditLogService;
+    private final TokenDenylist tokenDenylist;
 
     @Override
     @Transactional
@@ -72,9 +74,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void logout(String token) {
-        // Stateless logout — the client discards the token.
-        // Production implementation would maintain a Redis-based token denylist.
+    public void logout(String token, String ipAddress, String userAgent) {
+        if (!jwtTokenProvider.validateToken(token)) return;
+        tokenDenylist.deny(token, jwtTokenProvider.extractExpiration(token).toInstant());
+        String email = jwtTokenProvider.extractEmail(token);
+        userRepository.findByEmail(email).ifPresent(user ->
+                auditLogService.log(AuditAction.LOGOUT, user, ipAddress, userAgent));
     }
 
     private void handleFailedAttempt(User user, String ipAddress, String userAgent) {

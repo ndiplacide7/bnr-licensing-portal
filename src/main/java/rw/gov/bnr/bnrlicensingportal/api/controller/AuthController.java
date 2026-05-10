@@ -35,9 +35,10 @@ public class AuthController {
 
     @PostMapping("/logout")
     @Operation(summary = "Invalidate the current session")
-    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String authHeader,
+                                       HttpServletRequest httpRequest) {
         String token = authHeader.startsWith("Bearer ") ? authHeader.substring(7) : authHeader;
-        authService.logout(token);
+        authService.logout(token, clientIp(httpRequest), userAgent(httpRequest));
         return ResponseEntity.noContent().build();
     }
 

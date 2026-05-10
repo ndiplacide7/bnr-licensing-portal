@@ -21,6 +21,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsServiceImpl userDetailsService;
+    private final TokenDenylist tokenDenylist;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -29,7 +30,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String token = extractBearerToken(request);
 
-        if (token != null && jwtTokenProvider.validateToken(token) && !jwtTokenProvider.isRefreshToken(token)) {
+        if (token != null && jwtTokenProvider.validateToken(token)
+                && !jwtTokenProvider.isRefreshToken(token)
+                && !tokenDenylist.isDenied(token)) {
             String email = jwtTokenProvider.extractEmail(token);
             AuthenticatedUser principal = (AuthenticatedUser) userDetailsService.loadUserByUsername(email);
 
