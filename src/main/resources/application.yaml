@@ -1,3 +1,67 @@
 spring:
   application:
     name: bnr-licensing-portal
+  profiles:
+    active: dev
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bnr_portal
+    username: ${DB_USERNAME:bnr_user}
+    password: ${DB_PASSWORD:changeme}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate   # Flyway owns the schema — Hibernate must not touch it
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: bnr
+        format_sql: false
+    show-sql: false
+    open-in-view: false    # avoid lazy-loading issues in the web layer
+
+  flyway:
+    enabled: true
+    schemas: bnr
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:replace-this-with-a-strong-256-bit-secret-in-production}
+    expiration-ms: 86400000        # 24 h
+    refresh-expiration-ms: 604800000  # 7 d
+  storage:
+    upload-dir: ${UPLOAD_DIR:uploads}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
