@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_DB: bnr_portal
       POSTGRES_USER: bnr_user
-      POSTGRES_PASSWORD: changeme
+      POSTGRES_PASSWORD: bnr_pwd
     ports:
       - "5432:5432"
     volumes:
