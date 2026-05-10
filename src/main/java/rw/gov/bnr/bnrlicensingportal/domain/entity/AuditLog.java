@@ -3,6 +3,8 @@ package rw.gov.bnr.bnrlicensingportal.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Immutable;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import rw.gov.bnr.bnrlicensingportal.domain.enums.AuditAction;
 import rw.gov.bnr.bnrlicensingportal.domain.enums.AuditSeverity;
 
@@ -37,9 +39,11 @@ public class AuditLog {
     @Column(nullable = false)
     private AuditAction action;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "previous_state", columnDefinition = "jsonb")
     private String previousState;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "new_state", columnDefinition = "jsonb")
     private String newState;
 

@@ -43,7 +43,7 @@ public class DataSeeder implements ApplicationRunner {
         log.info("Seeding database with initial users and applications...");
         String hash = passwordEncoder.encode("Password1!");
 
-        User admin    = save(user("admin@bnr.rw",       "Cyusa",   "Eric",    Role.SYSTEM_ADMIN, hash));
+        User admin    = save(user("admin@bnr.rw",       "Placido",   "Placide",    Role.SYSTEM_ADMIN, hash));
         User applicant = save(user("applicant@bnr.rw",  "Mugisha", "Diane",   Role.APPLICANT,    hash));
         User reviewer  = save(user("reviewer@bnr.rw",   "Nkusi",   "Patrick", Role.REVIEWER,     hash));
         User approver  = save(user("approver@bnr.rw",   "Habimana","Alice",   Role.APPROVER,     hash));
