@@ -34,6 +34,9 @@ public class LicenseApplication {
     @JoinColumn(name = "approver_id")
     private User approver;
 
+    @Column(name = "registration_id", nullable = false, unique = true, length = 9)
+    private String registrationId;
+
     @Column(name = "institution_name", nullable = false)
     private String institutionName;
 

@@ -43,39 +43,40 @@ public class DataSeeder implements ApplicationRunner {
         log.info("Seeding database with initial users and applications...");
         String hash = passwordEncoder.encode("Password1!");
 
-        User admin    = save(user("admin@bnr.rw",       "Placido",   "Placide",    Role.SYSTEM_ADMIN, hash));
-        User applicant = save(user("applicant@bnr.rw",  "Mugisha", "Diane",   Role.APPLICANT,    hash));
-        User reviewer  = save(user("reviewer@bnr.rw",   "Nkusi",   "Patrick", Role.REVIEWER,     hash));
-        User approver  = save(user("approver@bnr.rw",   "Habimana","Alice",   Role.APPROVER,     hash));
-        save(user("compliance@bnr.rw",  "Uwase",  "Jane",  Role.COMPLIANCE_OFFICER, hash));
-        save(user("auditor@bnr.rw",     "Ntare",  "Joel",  Role.AUDITOR,            hash));
+        User applicant  = save(user("applicant@bnr.rw",  "Mugisha",  "Derick",    Role.APPLICANT,          hash));
+        User reviewer   = save(user("reviewer@bnr.rw",   "Nkusi",    "Assouman",  Role.REVIEWER,           hash));
+                          save(user("approver@bnr.rw",   "Habimana", "Calixte",   Role.APPROVER,           hash));
+                          save(user("compliance@bnr.rw", "Uwase",    "Jannette",  Role.COMPLIANCE_OFFICER, hash));
+                          save(user("auditor@bnr.rw",    "Karangwa", "Richard",   Role.AUDITOR,            hash));
+                          save(user("admin@bnr.rw",      "Placido",  "Placide",   Role.SYSTEM_ADMIN,       hash));
 
-        // Application 1: DRAFT — just created by the applicant
+        // Application 1 — DRAFT: created by applicant, not yet submitted
         applicationRepository.save(LicenseApplication.builder()
-                .applicant(applicant)
+                .registrationId("123456789")
                 .institutionName("Kigali Microfinance Ltd")
                 .licenseType(LicenseType.MICROFINANCE_INSTITUTION)
+                .applicant(applicant)
                 .status(ApplicationStatus.DRAFT)
                 .build());
 
-        // Application 2: UNDER_REVIEW — submitted and assigned to a reviewer
-        LicenseApplication underReview = LicenseApplication.builder()
-                .applicant(applicant)
-                .reviewer(reviewer)
+        // Application 2 — UNDER_REVIEW: submitted 3 days ago, assigned to reviewer
+        applicationRepository.save(LicenseApplication.builder()
+                .registrationId("987654321")
                 .institutionName("Rwanda Commercial Bank")
                 .licenseType(LicenseType.COMMERCIAL_BANK)
+                .applicant(applicant)
+                .reviewer(reviewer)
                 .status(ApplicationStatus.UNDER_REVIEW)
                 .submittedAt(OffsetDateTime.now().minusDays(3))
-                .build();
-        applicationRepository.save(underReview);
+                .build());
 
         log.info("Seeding complete. Login with any seeded user — password: Password1!");
-        log.info("  SYSTEM_ADMIN     : admin@bnr.rw");
-        log.info("  APPLICANT        : applicant@bnr.rw");
-        log.info("  REVIEWER         : reviewer@bnr.rw");
-        log.info("  APPROVER         : approver@bnr.rw");
+        log.info("  SYSTEM_ADMIN      : admin@bnr.rw");
+        log.info("  APPLICANT         : applicant@bnr.rw");
+        log.info("  REVIEWER          : reviewer@bnr.rw");
+        log.info("  APPROVER          : approver@bnr.rw");
         log.info("  COMPLIANCE_OFFICER: compliance@bnr.rw");
-        log.info("  AUDITOR          : auditor@bnr.rw");
+        log.info("  AUDITOR           : auditor@bnr.rw");
     }
 
     private User user(String email, String lastName, String firstName, Role role, String hash) {

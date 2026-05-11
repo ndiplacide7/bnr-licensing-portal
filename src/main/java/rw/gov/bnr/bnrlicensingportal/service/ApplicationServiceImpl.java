@@ -38,6 +38,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         User applicant = findUser(applicantId);
         LicenseApplication app = applicationRepository.save(LicenseApplication.builder()
                 .applicant(applicant)
+                .registrationId(request.registrationId())
                 .institutionName(request.institutionName())
                 .licenseType(request.licenseType())
                 .status(ApplicationStatus.DRAFT)
@@ -210,6 +211,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     private ApplicationResponse toResponse(LicenseApplication app) {
         return new ApplicationResponse(
                 app.getId(),
+                app.getRegistrationId(),
                 app.getInstitutionName(),
                 app.getLicenseType(),
                 app.getStatus(),
