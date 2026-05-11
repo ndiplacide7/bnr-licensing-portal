@@ -198,7 +198,7 @@ No raw stack traces are returned. All errors follow a consistent structure:
 mvn test
 ```
 
-Tests use Testcontainers to spin up a real PostgreSQL instance — no mocks, no H2.
+Tests use Testcontainers to test with a real PostgreSQL instance
 Docker Desktop must be running.
 
 ---
