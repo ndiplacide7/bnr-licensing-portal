@@ -2,13 +2,11 @@
 
 A licensing management system built for the National Bank of Rwanda. It handles the full lifecycle of financial institution license applications — from submission through review to final approval — with role-based access control and a complete audit trail on every action.
 
-Built by **Eng. Placide** · [ndiplacide7@gmail.com](mailto:ndiplacide7@gmail.com)
-
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
+| **Layer** | **Technology** |
 |-------|-----------|
 | Runtime | Java 25 |
 | Framework | Spring Boot 4.0.6 |
@@ -51,7 +49,7 @@ Swagger UI → `http://localhost:8080/api/swagger-ui.html`
 
 ## Seed Data
 
-On first startup the application automatically seeds the database with one user per role and two applications in different states. No manual setup needed.
+On first startup the application automatically seeds the database with one user per role and two applications in different states.
 
 ### Users — all share password `Password1!`
 
